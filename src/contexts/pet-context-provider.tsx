@@ -2,6 +2,7 @@
 
 import { Pet } from '@/lib/types';
 import { createContext, useState } from 'react';
+import { addPet } from '@/actions/actions';
 
 type PetContextProviderProps = {
   data: Pet[];
@@ -34,14 +35,15 @@ export default function PetContextProvider({
   const numberOfPets = pets.length;
 
   // event handlers / actions
-  const handleAddPet = (newPet: Omit<Pet, 'id'>) => {
-    setPets((prev) => [
-      ...prev,
-      {
-        id: Date.now().toString(),
-        ...newPet,
-      },
-    ]);
+  const handleAddPet = async (newPet: Omit<Pet, 'id'>) => {
+    // setPets((prev) => [
+    //   ...prev,
+    //   {
+    //     id: Date.now().toString(),
+    //     ...newPet,
+    //   },
+    // ]);
+    await addPet(newPet);
   };
   const handleEditPet = (petId: string, newPetData: Omit<Pet, 'id'>) => {
     setPets((prev) =>
