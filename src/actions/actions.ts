@@ -7,7 +7,7 @@ export async function addPet(pet) {
   await sleep(3000);
   try {
   await prisma.pet.create({
-    data: petData
+    data: pet
   });
   } catch(error) {
     return {
