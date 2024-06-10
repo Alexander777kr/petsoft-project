@@ -1,14 +1,10 @@
 'use client';
 
-import React from 'react';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { usePetContext } from '@/lib/hooks';
-import { addPet, editPet } from '@/actions/actions';
 import PetFormBtn from './pet-form-btn';
-import { toast } from 'sonner';
-import { log } from 'console';
 
 type PetFormProps = {
   actionType: 'add' | 'edit';
