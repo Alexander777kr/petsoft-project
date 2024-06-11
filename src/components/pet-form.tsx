@@ -6,6 +6,8 @@ import { Textarea } from './ui/textarea';
 import { usePetContext } from '@/lib/hooks';
 import PetFormBtn from './pet-form-btn';
 import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 type PetFormProps = {
   actionType: 'add' | 'edit';
@@ -20,6 +22,21 @@ type TPetForm = {
   notes: string;
 };
 
+const petFormSchema = z.object({
+  name: z.string().trim().min(1, { message: 'Name is required' }).max(100),
+  ownerName: z
+    .string()
+    .trim()
+    .min(1, { message: 'Owner name is required' })
+    .max(100),
+  imageUrl: z.union([
+    z.literal(''),
+    z.string().trim().url({ message: 'Image url must be a valid url' }),
+  ]),
+  age: z.coerce.number().int().positive().max(99999),
+  notes: z.union([z.literal(''), z.string().trim().max(1000)]),
+});
+
 export default function PetForm({
   actionType,
   onFormSubmission,
@@ -30,7 +47,9 @@ export default function PetForm({
     register,
     trigger,
     formState: { errors },
-  } = useForm<TPetForm>();
+  } = useForm<TPetForm>({
+    resolver: zodResolver(petFormSchema),
+  });
 
   return (
     <form
@@ -61,13 +80,7 @@ export default function PetForm({
           <Label htmlFor="name">Name</Label>
           <Input
             id="name"
-            {...register('name', {
-              required: 'Name is required',
-              minLength: {
-                value: 3,
-                message: 'Name must be at least 3 characters long.',
-              },
-            })}
+            {...register('name')}
             // type="text"
             // defaultValue={actionType === 'edit' ? selectedPet?.name : ''}
             // required
@@ -78,13 +91,7 @@ export default function PetForm({
           <Label htmlFor="ownerName">Owner name</Label>
           <Input
             id="ownerName"
-            {...register('ownerName', {
-              required: 'Owner name is required',
-              maxLength: {
-                value: 5,
-                message: 'Owner name must be less than 5 characters long.',
-              },
-            })}
+            {...register('ownerName')}
             // name="ownerName"
             // type="text"
             // required
