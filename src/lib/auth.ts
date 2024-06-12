@@ -1,5 +1,4 @@
 import NextAuth, { NextAuthConfig } from "next-auth";
-import { signIn } from "next-auth/react";
 
 const config = {
   pages: {
@@ -18,6 +17,6 @@ const config = {
   },
 } satisfies NextAuthConfig;
 
-export const {auth} = NextAuth(config);
+export const { auth, signIn } = NextAuth(config);
 
 
