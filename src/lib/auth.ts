@@ -52,6 +52,13 @@ const config = {
       }
 
       return false;
+    },
+    jwt: ({token, user}) => {
+      if (user) {
+        // on sign in
+        token.userId = user.id;
+      }
+      return token;
     }
   },
 } satisfies NextAuthConfig;
