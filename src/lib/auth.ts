@@ -1,8 +1,8 @@
 import NextAuth, { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import prisma from './db';
 import bcrypt from 'bcryptjs';
 import { getUserByEmail } from "./server-utils";
+import { authSchema, TAuth } from '@/lib/validations';
 
 const config = {
   pages: {
@@ -11,8 +11,14 @@ const config = {
   providers: [
     Credentials({
       async authorize(credentials) {
-        //  runs on login
-        const {email, password} = credentials;
+          //  runs on login
+         // validate the object
+      const validatedFormData = authSchema.safeParse(credentials);
+      if (!validatedFormData.success) {
+      return null;
+      }
+        //  extract values
+       const {email, password} = validatedFormData.data;
        const user = await getUserByEmail(email);
         if (!user) {
           console.log("No user found");
