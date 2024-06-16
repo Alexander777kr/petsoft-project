@@ -6,7 +6,7 @@ import { petFormSchema, petIdSchema } from '@/lib/validations';
 import { revalidatePath } from 'next/cache';
 import bcrypt from 'bcryptjs';
 import { redirect } from 'next/navigation';
-import { checkAuth } from '@/lib/server-utils';
+import { checkAuth, getPetByPetId } from '@/lib/server-utils';
 
 // --- user actions ---
 
@@ -80,11 +80,7 @@ export async function editPet(petId: unknown, newPetData: unknown) {
   }
 
   // authorization check
-  const pet = await prisma.pet.findUnique({
-    where: {
-      id: validatedPetId.data
-    }
-  });
+  const pet = await getPetByPetId(validatedPetId.data);
     if (!pet) {
     return {
       message: "Pet not found."
@@ -128,11 +124,7 @@ export async function deletePet(petId: unknown) {
   }
 
   // authorization check (user owns pet)
-  const pet = await prisma.pet.findUnique({
-    where: {
-      id: validatedPetId.data
-    }
-  });
+  const pet = await getPetByPetId(validatedPetId.data);
   if (!pet) {
     return {
       message: "Pet not found."
