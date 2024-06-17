@@ -8,10 +8,11 @@ import bcrypt from 'bcryptjs';
 import { redirect } from 'next/navigation';
 import { checkAuth, getPetByPetId } from '@/lib/server-utils';
 import { Prisma } from '@prisma/client';
+import { AuthError } from 'next-auth';
 
 // --- user actions ---
 
-export async function logIn(formData: unknown) {
+export async function logIn(prevState: unknown, formData: unknown) {
   await sleep(1000);
   if (!(formData instanceof FormData)) {
     return {
@@ -19,10 +20,31 @@ export async function logIn(formData: unknown) {
     };
   }
 
-  await signIn("credentials", formData);
+  try {
+    await signIn("credentials", formData);
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch(error.type) {
+        case 'CredentialsSignin': {
+          return {
+            message: 'Invalid credentials.'
+          };
+        }
+        default: {
+          return {
+            message: "Could not sign in."
+          };
+        }
+      }
+    }
+    return {
+      message: "Could not sign in."
+    };
+  }
+
 }
 
- export async function signUp(formData: unknown) {
+ export async function signUp(prevState: unknown, formData: unknown) {
   await sleep(1000);
   // check if formData is a FormData type
   if (!(formData instanceof FormData)) {
