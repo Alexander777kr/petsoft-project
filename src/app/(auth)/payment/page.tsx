@@ -24,6 +24,11 @@ export default function Page({ searchParams }) {
           Payment successful. You now have lifetime access to PetSoft.
         </p>
       )}
+      {searchParams.cancelled && (
+        <p className="text-sm text-red-700">
+          Payment cancelled. You can try again.
+        </p>
+      )}
     </main>
   );
 }
