@@ -5,7 +5,6 @@ import { sleep } from '@/lib/utils';
 import { authSchema, petFormSchema, petIdSchema } from '@/lib/validations';
 import { revalidatePath } from 'next/cache';
 import bcrypt from 'bcryptjs';
-import { redirect } from 'next/navigation';
 import { checkAuth, getPetByPetId } from '@/lib/server-utils';
 import { Prisma } from '@prisma/client';
 import { AuthError } from 'next-auth';
