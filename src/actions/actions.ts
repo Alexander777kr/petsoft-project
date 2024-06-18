@@ -86,6 +86,7 @@ export async function logIn(prevState: unknown, formData: unknown) {
   }
 
 export async function logOut() {
+  await sleep(1000);
   await signOut({redirectTo: '/'});
 }
 
