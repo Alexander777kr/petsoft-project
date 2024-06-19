@@ -76,7 +76,6 @@ const config = {
       }
 
       if (trigger === 'update') {
-        await sleep(1000);
        const userFromDb = await getUserByEmail(token.email);
        if (userFromDb) {
         token.hasAccess = userFromDb.hasAccess;
